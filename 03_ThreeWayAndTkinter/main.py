@@ -13,6 +13,17 @@ class Application(tk.Frame):
 		self.create_widgets()
 		self.grid(sticky=tk.NSEW)
 
+	@staticmethod
+	def is_solvable(nums):
+		wrong_sum = 0
+		for i in range(16):
+			for j in range(i + 1, 16):
+				if nums[i] == 0:
+					wrong_sum += i // 4 + 1
+				if nums[j] != 0 and nums[i] > nums[j]:
+					wrong_sum += 1
+		return wrong_sum % 2 == 0
+
 	def _create_buttons(self):
 		for i in range(4):
 			for j in range(4):
@@ -30,6 +41,8 @@ class Application(tk.Frame):
 		nums = list(range(16))
 		shuffle(nums)
 
+		while not self.is_solvable(nums):
+			shuffle(nums)
 		self.play_grid = [[nums[x * 4 + y] for y in range(4)] for x in range(4)]
 		self._create_buttons()
 
