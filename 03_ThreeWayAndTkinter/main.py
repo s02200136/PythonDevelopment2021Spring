@@ -46,6 +46,12 @@ class Application(tk.Frame):
 		self.play_grid = [[nums[x * 4 + y] for y in range(4)] for x in range(4)]
 		self._create_buttons()
 
+	def _check(self):
+		for i in range(1, 16):
+			if not self.play_grid[(i - 1) // 4][(i - 1) % 4] == i:
+				return False
+		return True
+
 	def _move(self, button):
 		y = button.grid_info()['column']
 		x = button.grid_info()['row']
@@ -69,6 +75,10 @@ class Application(tk.Frame):
 				self.play_grid[x + 1][y] = self.play_grid[x][y]
 				self.play_grid[x][y] = 0
 				button.grid(column=y, row=x + 1)
+
+		if self._check():
+			messagebox.showinfo('You Won!', message='Congratulations!')
+			self._generate_new_task()
 
 	def create_widgets(self):
 		self.comands = tk.Frame(self, bg='orange', borderwidth=5, relief="ridge", width=200, height=100)
